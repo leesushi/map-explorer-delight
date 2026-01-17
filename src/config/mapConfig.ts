@@ -12,10 +12,10 @@ export const MAP_CONFIG = {
   },
 
   defaultUserLocation: {
-    lat: 21.0285,
-    lng: 105.8542,
+    lat: 21.1367,
+    lng: 105.8487,
   },
-  defaultLocationLabel: 'Hanoi, Vietnam',
+  defaultLocationLabel: 'Đông Anh Hà Nội Việt Nam',
 
   mapOptions: {
     zoom: 14,
