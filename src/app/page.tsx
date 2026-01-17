@@ -1,7 +1,5 @@
 import { MapContainer } from '@/components/map/MapContainer';
 
-const Index = () => {
+export default function HomePage() {
   return <MapContainer />;
-};
-
-export default Index;
+}

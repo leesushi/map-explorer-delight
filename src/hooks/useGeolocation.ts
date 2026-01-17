@@ -3,7 +3,8 @@ import { MAP_CONFIG, MapPosition } from '@/config/mapConfig';
 
 interface GeolocationState {
   position: MapPosition | null;
-  error: string | null;
+  message: string | null;
+  messageType: 'notice' | 'error' | null;
   loading: boolean;
   isUsingDefault: boolean;
 }
@@ -11,18 +12,20 @@ interface GeolocationState {
 export const useGeolocation = () => {
   const [state, setState] = useState<GeolocationState>({
     position: null,
-    error: null,
+    message: null,
+    messageType: null,
     loading: true,
     isUsingDefault: false,
   });
 
   const requestLocation = useCallback(() => {
-    setState(prev => ({ ...prev, loading: true, error: null }));
+    setState(prev => ({ ...prev, loading: true, message: null, messageType: null }));
 
     if (!navigator.geolocation) {
       setState({
         position: MAP_CONFIG.defaultUserLocation,
-        error: 'Geolocation is not supported by your browser',
+        message: 'Location access is not supported by your browser.',
+        messageType: 'notice',
         loading: false,
         isUsingDefault: true,
       });
@@ -36,27 +39,29 @@ export const useGeolocation = () => {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
           },
-          error: null,
+          message: null,
+          messageType: null,
           loading: false,
           isUsingDefault: false,
         });
       },
       (error) => {
-        let errorMessage = 'Unable to get your location';
+        let message = 'Unable to get your location.';
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Location permission denied';
+            message = 'Location access is blocked. Using a default location.';
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information unavailable';
+            message = 'Location information is unavailable. Using a default location.';
             break;
           case error.TIMEOUT:
-            errorMessage = 'Location request timed out';
+            message = 'Location request timed out. Using a default location.';
             break;
         }
         setState({
           position: MAP_CONFIG.defaultUserLocation,
-          error: errorMessage,
+          message,
+          messageType: 'notice',
           loading: false,
           isUsingDefault: true,
         });

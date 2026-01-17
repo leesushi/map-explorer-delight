@@ -1,23 +1,22 @@
-// Map configuration with environment variable support
-// In Vite, env vars must be prefixed with VITE_ to be exposed to the client
+const parseEnvNumber = (value: string | undefined, fallback: number) => {
+  const parsed = value ? Number.parseFloat(value) : Number.NaN;
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
 
 export const MAP_CONFIG = {
-  // Google Maps API Key
-  apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || 'AIzaSyDWuA8K4g26AdBvrZpb4dncpgMLIwX1moM',
-  
-  // Pinned location from environment variables (with defaults)
+  apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? '',
+
   pinnedLocation: {
-    lat: parseFloat(import.meta.env.VITE_PIN_LAT || '40.7128'),
-    lng: parseFloat(import.meta.env.VITE_PIN_LONG || '-74.0060'),
+    lat: parseEnvNumber(process.env.NEXT_PUBLIC_PIN_LAT, 40.7128),
+    lng: parseEnvNumber(process.env.NEXT_PUBLIC_PIN_LONG, -74.0060),
   },
-  
-  // Default fallback location (New York City) when geolocation is unavailable
+
   defaultUserLocation: {
-    lat: 40.7580,
-    lng: -73.9855,
+    lat: 21.0285,
+    lng: 105.8542,
   },
-  
-  // Map styling options
+  defaultLocationLabel: 'Hanoi, Vietnam',
+
   mapOptions: {
     zoom: 14,
     minZoom: 3,
@@ -28,8 +27,7 @@ export const MAP_CONFIG = {
     streetViewControl: false,
     fullscreenControl: false,
   },
-  
-  // Custom map styles for a cleaner look
+
   mapStyles: [
     {
       featureType: 'poi',

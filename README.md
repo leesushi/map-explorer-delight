@@ -1,73 +1,45 @@
-# Welcome to your Lovable project
+# Map Explorer Delight
 
-## Project info
+A Next.js (App Router) app that embeds Google Maps with a custom polygon overlay, a pinned destination, and walking directions from the user's location (or a default fallback).
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Features
+- Google Maps JavaScript API integration via `@react-google-maps/api`
+- Custom polygon overlay that stays anchored to map coordinates while zooming
+- Pinned destination loaded from environment variables
+- Walking directions with distance/time details
+- Geolocation fallback when location access is unavailable
 
-## How can I edit this code?
-
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+## Environment Variables
+Create a `.env` file based on `.env.example`:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_key_here
+NEXT_PUBLIC_PIN_LAT=40.7128
+NEXT_PUBLIC_PIN_LONG=-74.0060
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Make sure these APIs are enabled for your key:
+- Maps JavaScript API
+- Directions API
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+## Local Development
+```sh
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open `http://localhost:3000`.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Docker
+```sh
+cp .env.example .env
+docker compose up --build
+```
 
-**Use GitHub Codespaces**
+The app will run at `http://localhost:3000`.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Approach
+- App Router entry point renders a client-side map container component.
+- Map configuration reads `NEXT_PUBLIC_*` env vars and provides defaults.
+- Geolocation hook handles permissions/unavailable cases and falls back to Times Square.
+- Directions use the Google DirectionsService with walking mode and render a styled polyline.

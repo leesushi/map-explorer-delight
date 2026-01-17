@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useCallback, useState, useRef } from 'react';
 import {
   GoogleMap,
@@ -27,7 +29,14 @@ export const MapContainer: React.FC = () => {
   });
 
   const mapRef = useRef<google.maps.Map | null>(null);
-  const { position: userPosition, error: geoError, loading: geoLoading, isUsingDefault, requestLocation } = useGeolocation();
+  const {
+    position: userPosition,
+    message: geoMessage,
+    messageType: geoMessageType,
+    loading: geoLoading,
+    isUsingDefault,
+    requestLocation,
+  } = useGeolocation();
   
   const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
   const [showInfoWindow, setShowInfoWindow] = useState(false);
@@ -225,10 +234,12 @@ export const MapContainer: React.FC = () => {
       <NavigationPanel
         isNavigating={isNavigating}
         routeInfo={routeInfo}
-        geoError={geoError}
+        geoMessage={geoMessage}
+        geoMessageType={geoMessageType}
         navigationError={navigationError}
         isUsingDefault={isUsingDefault}
         geoLoading={geoLoading}
+        defaultLocationLabel={MAP_CONFIG.defaultLocationLabel}
         onStartNavigation={handleStartNavigation}
         onClearNavigation={handleClearNavigation}
         onRetryLocation={requestLocation}

@@ -4,10 +4,12 @@ import { Navigation, X, AlertCircle, RefreshCw, MapPin, Clock, Route } from 'luc
 interface NavigationPanelProps {
   isNavigating: boolean;
   routeInfo: { distance: string; duration: string } | null;
-  geoError: string | null;
+  geoMessage: string | null;
+  geoMessageType: 'notice' | 'error' | null;
   navigationError: string | null;
   isUsingDefault: boolean;
   geoLoading: boolean;
+  defaultLocationLabel: string;
   onStartNavigation: () => void;
   onClearNavigation: () => void;
   onRetryLocation: () => void;
@@ -16,14 +18,23 @@ interface NavigationPanelProps {
 export const NavigationPanel: React.FC<NavigationPanelProps> = ({
   isNavigating,
   routeInfo,
-  geoError,
+  geoMessage,
+  geoMessageType,
   navigationError,
   isUsingDefault,
   geoLoading,
+  defaultLocationLabel,
   onStartNavigation,
   onClearNavigation,
   onRetryLocation,
 }) => {
+  const isNotice = geoMessageType !== 'error';
+  const geoPanelClass = isNotice
+    ? 'bg-accent/10 border border-accent/20'
+    : 'bg-destructive/10 border border-destructive/20';
+  const geoIconClass = isNotice ? 'text-accent' : 'text-destructive';
+  const geoTextClass = isNotice ? 'text-foreground' : 'text-destructive';
+
   return (
     <div className="absolute left-4 top-4 max-w-sm animate-slide-up">
       <div className="glass-panel-elevated p-5 space-y-4">
@@ -50,15 +61,15 @@ export const NavigationPanel: React.FC<NavigationPanelProps> = ({
           </div>
         )}
 
-        {geoError && (
-          <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/20">
+        {geoMessage && (
+          <div className={`p-3 rounded-lg ${geoPanelClass}`}>
             <div className="flex items-start gap-2">
-              <AlertCircle className="w-4 h-4 text-destructive mt-0.5 flex-shrink-0" />
+              <AlertCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${geoIconClass}`} />
               <div className="flex-1">
-                <p className="text-sm text-destructive font-medium">{geoError}</p>
+                <p className={`text-sm font-medium ${geoTextClass}`}>{geoMessage}</p>
                 {isUsingDefault && (
                   <p className="text-xs text-muted-foreground mt-1">
-                    Using default location (Times Square, NYC)
+                    Using default location ({defaultLocationLabel})
                   </p>
                 )}
               </div>
