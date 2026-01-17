@@ -116,9 +116,14 @@ export const NavigationPanel: React.FC<NavigationPanelProps> = ({
             <button
               onClick={onStartNavigation}
               disabled={geoLoading}
-              className="flex-1 map-button-primary flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              style={geoLoading ? { opacity: 1 } : undefined}
+              className={`flex-1 flex items-center justify-center gap-2 ${
+                geoLoading
+                  ? 'map-button-secondary text-foreground cursor-not-allowed'
+                  : 'map-button-primary'
+              } disabled:opacity-100 disabled:text-foreground`}
             >
-              <Navigation className="w-4 h-4" />
+              <Navigation className={`w-4 h-4 ${geoLoading ? 'text-foreground' : ''}`} />
               <span>Get Directions</span>
             </button>
           ) : (

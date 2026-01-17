@@ -141,7 +141,7 @@
   }
 
   .map-button-primary {
-    @apply map-button gradient-primary text-primary-foreground border-transparent;
+    @apply map-button gradient-primary text-foreground border-transparent;
   }
 
   .map-button-secondary {
